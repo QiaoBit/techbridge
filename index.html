@@ -50,7 +50,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- 字重按实际用量裁剪：去掉未使用的 Mono 300、Sans SC 300/900、Serif SC 900，显著减少 CJK 字体加载 -->
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+SC:wght@400;700&family=Noto+Serif+SC:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=32">
+    <link rel="stylesheet" href="style.css?v=33">
     <link rel="stylesheet" href="jarvis-hud.css?v=6">
 
     <!-- Structured Data -->
@@ -175,15 +175,17 @@
                 "itemListElement": [
                     { "@type": "ListItem", "position": 1, "name": "硅基物语", "url": "https://siliconstory.cn/" },
                     { "@type": "ListItem", "position": 2, "name": "AI Skills 年度买手服务", "url": "https://skills.siliconstory.cn/skills", "description": "全年至少 12 期，每期精选 5 至 10 个高价值 AI Skills，并提供中文买手判断、原创 Skill Pack 与进阶实践社群。" },
-                    { "@type": "ListItem", "position": 3, "name": "择偶定位", "url": "https://mate.siliconstory.cn/" },
-                    { "@type": "ListItem", "position": 4, "name": "有问必显", "description": "AI 搜索可见度优化工具，也称 GEO。" },
-                    { "@type": "ListItem", "position": 5, "name": "Kairos", "url": "https://x-kairos.com/" },
-                    { "@type": "ListItem", "position": 6, "name": "虚拟偶像 林雪妮", "url": "https://shirleylin.cc/" },
-                    { "@type": "ListItem", "position": 7, "name": "Creator Studio" },
-                    { "@type": "ListItem", "position": 8, "name": "Novart" },
-                    { "@type": "ListItem", "position": 9, "name": "超模算力", "url": "https://supmodai.com/", "description": "聚焦培训与咨询的算力服务公司。" },
-                    { "@type": "ListItem", "position": 10, "name": "电商AI素材通", "description": "外贸社媒素材生产工具，一张产品图生成朋友圈文案、产品场景图和短视频素材。" },
-                    { "@type": "ListItem", "position": 11, "name": "地球 Online" }
+                    { "@type": "ListItem", "position": 3, "name": "旷野 Wayfar", "url": "https://wayfar.qianx.ai/", "description": "面向全球旅居与远程工作者的城市、赚钱路径与出海基础设施指南。" },
+                    { "@type": "ListItem", "position": 4, "name": "如果世界", "url": "https://if.qianx.ai/", "description": "说一句如果，观察一座会记住用户选择的 AI 微型世界如何生活。" },
+                    { "@type": "ListItem", "position": 5, "name": "择偶定位", "url": "https://mate.siliconstory.cn/" },
+                    { "@type": "ListItem", "position": 6, "name": "有问必显", "description": "AI 搜索可见度优化工具，也称 GEO。" },
+                    { "@type": "ListItem", "position": 7, "name": "Kairos", "url": "https://x-kairos.com/" },
+                    { "@type": "ListItem", "position": 8, "name": "虚拟偶像 林雪妮", "url": "https://shirleylin.cc/" },
+                    { "@type": "ListItem", "position": 9, "name": "Creator Studio" },
+                    { "@type": "ListItem", "position": 10, "name": "Novart" },
+                    { "@type": "ListItem", "position": 11, "name": "超模算力", "url": "https://supmodai.com/", "description": "聚焦培训与咨询的算力服务公司。" },
+                    { "@type": "ListItem", "position": 12, "name": "电商AI素材通", "description": "外贸社媒素材生产工具，一张产品图生成朋友圈文案、产品场景图和短视频素材。" },
+                    { "@type": "ListItem", "position": 13, "name": "地球 Online" }
                 ]
             },
             {
@@ -898,6 +900,32 @@
                     </div>
                 </div>
             </a>
+            <a class="project-card project-card-wayfar reveal" href="https://wayfar.qianx.ai/" target="_blank" rel="noopener noreferrer">
+                <img class="project-visual" src="project-wayfar.webp" alt="" loading="lazy" aria-hidden="true">
+                <div class="project-card-content">
+                    <div class="project-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M15.5 8.5l-2.2 4.8-4.8 2.2 2.2-4.8 4.8-2.2z"/></svg></div>
+                    <div class="project-name">旷野 Wayfar</div>
+                    <div class="project-desc">全球生活指南 — 从城市选择、远程赚钱路径到出海基础设施，提供有来源、有时效的行动情报。</div>
+                    <div class="project-meta">
+                        <span class="project-status status-live">已上线</span>
+                        <span class="project-tag">旅居 × 赚钱路径</span>
+                        <span class="project-action">进入产品 →</span>
+                    </div>
+                </div>
+            </a>
+            <a class="project-card project-card-if-world reveal" href="https://if.qianx.ai/" target="_blank" rel="noopener noreferrer">
+                <img class="project-visual" src="project-if-world.webp" alt="" loading="lazy" aria-hidden="true">
+                <div class="project-card-content">
+                    <div class="project-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><ellipse cx="12" cy="12" rx="9" ry="4.5" transform="rotate(-28 12 12)"/><circle cx="19" cy="8" r="1"/></svg></div>
+                    <div class="project-name">如果世界</div>
+                    <div class="project-desc">AI 微型世界 — 说一句“如果”，观察一座只有你是真人的小镇如何生活，并记住你的选择。</div>
+                    <div class="project-meta">
+                        <span class="project-status status-live">已上线</span>
+                        <span class="project-tag">AI × 互动世界</span>
+                        <span class="project-action">进入产品 →</span>
+                    </div>
+                </div>
+            </a>
             <a class="project-card reveal" href="https://mate.siliconstory.cn/" target="_blank" rel="noopener noreferrer">
                 <img class="project-visual" src="project-mate-positioning.webp" alt="" loading="lazy" aria-hidden="true">
                 <div class="project-card-content">
@@ -1013,7 +1041,7 @@
                 </div>
             </div>
         </div>
-        <button class="projects-toggle" id="projectsToggle" aria-expanded="false">展开全部 11 个产品 ↓</button>
+        <button class="projects-toggle" id="projectsToggle" aria-expanded="false">展开全部 13 个产品 ↓</button>
 
         <div class="hardware-products reveal" id="hardware-products" aria-labelledby="hardwareProductsTitle">
             <div class="hardware-products-head">

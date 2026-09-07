@@ -4760,6 +4760,23 @@ body.inquiry-modal-open {
     object-position: 58% center;
 }
 
+.project-card-wayfar::before {
+    background:
+        linear-gradient(180deg, rgba(9, 25, 20, 0.04) 0%, rgba(9, 25, 20, 0.48) 50%, rgba(9, 25, 20, 0.93) 100%),
+        radial-gradient(circle at 78% 18%, rgba(205, 246, 78, 0.12), transparent 34%);
+}
+
+.project-card-if-world::before {
+    background:
+        linear-gradient(180deg, rgba(3, 14, 24, 0.02) 0%, rgba(3, 14, 24, 0.42) 50%, rgba(3, 14, 24, 0.94) 100%),
+        radial-gradient(circle at 78% 20%, rgba(203, 180, 119, 0.14), transparent 36%);
+}
+
+.project-card-wayfar .project-visual,
+.project-card-if-world .project-visual {
+    object-position: center;
+}
+
 .project-card::after {
     content: "";
     position: absolute;
