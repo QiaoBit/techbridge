@@ -18,6 +18,9 @@ server
 supabase
 tests
 worker.js
+frontend-worker.js
+wrangler.frontend.jsonc
+src
 wrangler.jsonc
 .dev.vars
 newsletter/

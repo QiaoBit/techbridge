@@ -1,0 +1,13 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "techbridge-frontend",
+  "main": "frontend-worker.js",
+  "compatibility_date": "2026-08-31",
+  "observability": { "enabled": true },
+  "services": [{ "binding": "LEGACY_SITE", "service": "techbridge" }],
+  "assets": { "directory": ".", "binding": "ASSETS", "run_worker_first": true },
+  "routes": [
+    { "pattern": "qiaobit.com/*", "zone_name": "qiaobit.com" },
+    { "pattern": "www.qiaobit.com/*", "zone_name": "qiaobit.com" }
+  ]
+}

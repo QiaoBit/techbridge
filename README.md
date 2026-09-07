@@ -41,13 +41,17 @@ npm run deploy:dry-run
 
 ## 生产安全
 
-当前满意的线上黄金版本：
+旧服务的保留版本：
 
 - Worker：`techbridge`
 - Version ID：`f5a9dd06-36b2-4a5e-a9ea-64845a3b0ad6`
 - 上线时间：2026-08-30
 
-本地清理版已经移除容易发生产接口。**在容易发独立 Worker 接管 `qiaobit.com/rongyifa/*`、`qiaobit.com/api/rongyifa/*` 和专用 Stripe Webhook 之前，禁止部署本仓库。**
+官网通过 `wrangler.frontend.jsonc` 发布到 `techbridge-frontend`，使用路由覆盖官网前端。API 和本仓库中不存在的旧产品页面，通过 `LEGACY_SITE` 服务绑定交给原 `techbridge` 处理。旧服务的代码、密钥、数据绑定和定时任务保持不变。
+
+**禁止直接运行不带配置的 `wrangler deploy`：根目录 `wrangler.jsonc` 仍指向旧服务，清理版 `worker.js` 不具备旧产品接口。** 使用 `npm run deploy`，只发布官网前端。
+
+首次切换可通过删除 `techbridge-frontend` 的两条官网路由回退：原 Custom Domain 仍指向未修改的 `techbridge`。日常前端回滚使用 `techbridge-frontend` 的上一版本。
 
 ## 目标发布流程
 
@@ -61,4 +65,4 @@ codex/功能分支
 → 线上冒烟验证
 ```
 
-日常发布不再从脏的本地工作区直接执行 `wrangler deploy`。紧急情况可以回滚到上面的黄金 Worker Version。
+日常发布不再从脏的本地工作区直接执行 `wrangler deploy`。以上自动部署为目标流程，是否已启用以 GitHub Actions 配置为准；本次采用经过验证的干净提交发布。
