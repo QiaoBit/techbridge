@@ -1,0 +1,34 @@
+.hero-brand-motion .hero-content {
+    transform: perspective(1600px)
+        translate3d(var(--brand-x, 0px), var(--brand-y, 0px), 0)
+        rotateX(var(--brand-pitch, 0deg)) rotateY(var(--brand-yaw, 0deg));
+    transform-origin: center;
+}
+@media (max-width: 360px) {
+    .hero-brand-motion .hero-title { font-size: 44px; }
+}
+.hero-brand-motion .hero-title .char {
+    filter: brightness(calc(1 + var(--letter-light, 0) * 0.32));
+    text-shadow: 0 1px 0 rgba(255,255,255,0.1), 0 4px 12px rgba(0,0,0,0.12);
+    transition: filter 240ms ease-out;
+}
+.hero-brand-motion .hero-title .text-orange .char {
+    text-shadow: 0 1px 0 rgba(255,255,255,0.1), 0 0 28px rgba(233,93,33,calc(var(--letter-light, 0) * 0.22));
+}
+.hero-brand-motion .hero-title .text-green .char {
+    text-shadow: 0 1px 0 rgba(255,255,255,0.1), 0 0 28px rgba(0,140,140,calc(var(--letter-light, 0) * 0.25));
+}
+.project-card.is-motion-active {
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.12s ease-out;
+    transform: perspective(1100px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateY(-3px);
+    box-shadow: 0 16px 36px rgba(0,0,0,0.22);
+}
+.project-card.is-motion-active .project-visual {
+    transform: translate(var(--image-x, 0px), var(--image-y, 0px)) scale(1.055);
+    transition: transform 0.18s ease-out;
+}
+@media (prefers-reduced-motion: reduce), (hover: none) {
+    .hero-brand-motion .hero-content { transform: none; }
+    .hero-brand-motion .hero-title .char { filter: none; text-shadow: none; }
+    .project-card.is-motion-active, .project-card.is-motion-active .project-visual { transform: none; }
+}

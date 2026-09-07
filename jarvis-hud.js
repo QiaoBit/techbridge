@@ -972,7 +972,7 @@ window.jarvisAR = window.jarvisAR || {
                 node.replaceWith(frag);
             } else if (node.nodeName === 'BR') {
                 // keep
-            } else if (node.nodeName === 'SPAN') {
+            } else if (node.nodeName === 'SPAN' && !node.classList.contains('visually-hidden')) {
                 // Wrap the span's text content in chars but keep the span's class
                 const text = node.textContent.trim();
                 if (!text) return;
