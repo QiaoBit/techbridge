@@ -4650,7 +4650,7 @@ body.inquiry-modal-open {
 
 .projects-grid {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 20px;
     margin-top: 48px;
 }
@@ -4727,6 +4727,19 @@ body.inquiry-modal-open {
 
 .project-card-consulting .project-card-content {
     max-width: 680px;
+}
+
+.project-card-sucaitong:not(.project-card-wide) .project-card-content {
+    max-width: none;
+}
+
+.project-card-sucaitong:not(.project-card-wide) .project-desc {
+    display: block;
+}
+
+.project-card-sucaitong:not(.project-card-wide) .project-name {
+    font-size: 20px;
+    line-height: 1.4;
 }
 
 .project-card::before {
