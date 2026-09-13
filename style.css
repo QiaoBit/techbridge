@@ -1221,6 +1221,44 @@ a { text-decoration: none; color: inherit; }
     color: var(--text-warm-white);
 }
 
+.talks-resource {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px 32px;
+    margin-top: 32px;
+    padding-top: 28px;
+    border-top: 1px solid var(--border-dark);
+}
+
+.talks-resource h3 {
+    margin: 0 0 8px;
+    color: var(--text-warm-white);
+    font-size: 22px;
+    letter-spacing: 0;
+}
+
+.talks-resource p {
+    margin: 0;
+    color: var(--text-warm-grey);
+    font-size: 14px;
+    line-height: 1.8;
+}
+
+.talks-resource-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 44px;
+    color: var(--orange-light);
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.talks-resource-link:hover { text-decoration: underline; text-underline-offset: 5px; }
+.talks-resource-link:focus-visible { outline: 2px solid var(--orange-main); outline-offset: 6px; }
+
 .seen-in-list {
     display: grid;
     grid-template-columns: repeat(7, minmax(0, 1fr));
