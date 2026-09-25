@@ -599,48 +599,7 @@ a { text-decoration: none; color: inherit; }
     }
 }
 
-/* Profile film: a distinct chapter after the three business pillars. */
-.about-profile-film {
-    width: min(1120px, 100%);
-    margin: 104px auto 72px;
-    padding-top: 38px;
-    display: grid;
-    grid-template-columns: minmax(220px, 0.38fr) minmax(0, 0.9fr);
-    gap: clamp(42px, 6vw, 78px);
-    align-items: start;
-    border-top: 1px solid var(--border-dark);
-}
-
-.about-profile-film-copy {
-    padding-top: 8px;
-}
-
-.about-profile-film-copy > span {
-    color: var(--orange-main);
-    font-family: var(--font-mono);
-    font-size: 10px;
-    letter-spacing: 1.2px;
-}
-
-.about-profile-film-copy h3 {
-    max-width: 260px;
-    margin: 22px 0 16px;
-    color: var(--text-warm-white);
-    font-family: var(--font-cn-body);
-    font-size: clamp(25px, 2.6vw, 34px);
-    line-height: 1.3;
-    letter-spacing: 0;
-}
-
-.about-profile-film-copy p {
-    max-width: 310px;
-    margin: 0;
-    color: var(--text-warm-grey);
-    font-family: var(--font-cn-body);
-    font-size: 13px;
-    line-height: 1.9;
-}
-
+/* Interview film in the press section (formerly the About profile film). */
 .intro-video-wrapper {
     position: relative;
     width: 100%;
@@ -668,32 +627,93 @@ a { text-decoration: none; color: inherit; }
 }
 
 @media (max-width: 768px) {
-    .about-profile-film {
-        margin-top: 66px;
-        margin-bottom: 52px;
-        padding-top: 28px;
-        grid-template-columns: 1fr;
-        gap: 26px;
-        text-align: left;
-    }
-
-    .about-profile-film-copy {
-        padding-top: 0;
-    }
-
-    .about-profile-film-copy h3,
-    .about-profile-film-copy p {
-        max-width: none;
-    }
-
-    .about-profile-film-copy h3 {
-        margin-top: 16px;
-        font-size: 26px;
-    }
-
     .intro-video-wrapper {
         max-width: none;
         border-radius: 8px;
+    }
+}
+
+/* Site tour film: the first thing below the hero. */
+.section-site-tour {
+    padding: 128px 48px 96px;
+}
+
+.site-tour {
+    width: min(1200px, 100%);
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(220px, 0.34fr) minmax(0, 1fr);
+    gap: clamp(40px, 5vw, 72px);
+    align-items: center;
+}
+
+.site-tour-copy > span {
+    color: var(--orange-main);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 2px;
+}
+
+.site-tour-copy h2 {
+    margin: 22px 0 18px;
+    color: var(--text-warm-white);
+    font-family: var(--font-cn-body);
+    font-size: clamp(28px, 3vw, 40px);
+    line-height: 1.25;
+    letter-spacing: 0;
+}
+
+.site-tour-copy h2 [data-lang="zh"] > span {
+    display: inline-block;
+}
+
+.site-tour-copy p {
+    max-width: 320px;
+    margin: 0;
+    color: var(--text-warm-grey);
+    font-family: var(--font-cn-body);
+    font-size: 14px;
+    line-height: 1.9;
+}
+
+.site-tour-video {
+    overflow: hidden;
+    border: 1px solid var(--border-dark);
+    border-radius: 8px;
+    box-shadow: 0 20px 64px rgba(0, 0, 0, 0.34);
+    transition: border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.site-tour-video:hover {
+    border-color: var(--orange-main);
+    box-shadow: 0 24px 74px rgba(0, 0, 0, 0.4), 0 0 42px rgba(233, 93, 33, 0.08);
+}
+
+.site-tour-video video {
+    width: 100%;
+    display: block;
+    aspect-ratio: 16/9;
+    object-fit: cover;
+    background: #000;
+}
+
+@media (max-width: 768px) {
+    .section-site-tour {
+        padding: 72px 16px 56px;
+    }
+
+    .site-tour {
+        grid-template-columns: 1fr;
+        gap: 24px;
+    }
+
+    .site-tour-copy h2 {
+        margin: 14px 0 12px;
+        font-size: 26px;
+    }
+
+    .site-tour-copy p {
+        max-width: none;
     }
 }
 
@@ -857,10 +877,6 @@ a { text-decoration: none; color: inherit; }
 /* Capability Stack */
 .section-about-profile {
     padding-bottom: 28px;
-}
-
-.section-about-profile .about-profile-film {
-    margin-bottom: 24px;
 }
 
 .section-capabilities {
@@ -1057,10 +1073,6 @@ a { text-decoration: none; color: inherit; }
 @media (max-width: 600px) {
     .section-about-profile {
         padding-bottom: 16px;
-    }
-
-    .section-about-profile .about-profile-film {
-        margin-bottom: 10px;
     }
 
     .section-capabilities {
@@ -1394,6 +1406,9 @@ a { text-decoration: none; color: inherit; }
 }
 
 .pudong-training figure:last-child img { object-position: center; }
+
+.press-film { align-items: center; }
+.press-film .intro-video-wrapper { max-width: none; }
 
 .pudong-training figcaption {
     margin-top: 7px;

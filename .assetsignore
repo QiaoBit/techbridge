@@ -17,6 +17,7 @@ functions
 server
 supabase
 tests
+docs
 worker.js
 frontend-worker.js
 wrangler.frontend.jsonc

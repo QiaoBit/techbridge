@@ -50,7 +50,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- 字重按实际用量裁剪：去掉未使用的 Mono 300、Sans SC 300/900、Serif SC 900，显著减少 CJK 字体加载 -->
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+SC:wght@400;700&family=Noto+Serif+SC:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=36">
+    <link rel="stylesheet" href="style.css?v=37">
     <link rel="stylesheet" href="brand-motion.css?v=1">
     <link rel="stylesheet" href="jarvis-hud.css?v=6">
 
@@ -395,6 +395,27 @@
         <div id="arHandCursor"></div>
     </section>
 
+    <!-- Site tour film -->
+    <section id="tour" class="section-site-tour" aria-labelledby="siteTourTitle">
+        <div class="site-tour reveal">
+            <div class="site-tour-copy">
+                <span data-lang="zh">官网导览 · 01:14</span>
+                <span data-lang="en" style="display:none;">SITE TOUR · 01:14</span>
+                <h2 id="siteTourTitle">
+                    <span data-lang="zh"><span>74 秒</span><span>看懂桥比特.</span></span>
+                    <span data-lang="en" style="display:none;">Qiaobit in 74 seconds.</span>
+                </h2>
+                <p data-lang="zh">三条主线、公开活动、做过的产品和一路走来的经历，先用一支短片看完，再往下挑你感兴趣的部分。</p>
+                <p data-lang="en" style="display:none;">Business lines, public appearances, products and the journey so far — watch the short film first, then scroll to what interests you.</p>
+            </div>
+            <div class="site-tour-video">
+                <video controls playsinline preload="none" poster="poster-site-tour.webp" aria-label="桥比特官网导览视频">
+                    <source src="site-tour.mp4" type="video/mp4">
+                </video>
+            </div>
+        </div>
+    </section>
+
     <div class="section-divider"></div>
 
     <!-- Screen 2: About -->
@@ -446,18 +467,6 @@
                 <h3><a href="/insights/enterprise-ai-implementation">企业 AI 落地</a></h3>
                 <p>提供场景诊断、培训咨询、流程改造、产品部署与自动化实施。</p>
             </article>
-        </div>
-        <div class="about-profile-film reveal">
-            <div class="about-profile-film-copy">
-                <span>PROFILE FILM · 00:44</span>
-                <h3>44 秒认识桥比特.</h3>
-                <p>从科技内容、中国产品出海到企业 AI 落地，看我如何把三件事连成一套完整能力。</p>
-            </div>
-            <div class="intro-video-wrapper">
-                <video controls playsinline preload="none">
-                    <source src="intro-video.mp4" type="video/mp4">
-                </video>
-            </div>
         </div>
     </section>
 
@@ -538,7 +547,7 @@
     <section class="section-about-proof" aria-label="Tech Bridge 公开数据与信念">
         <div class="stats-bar reveal">
             <div class="stat-item">
-                <div class="stat-number"><span class="stat-accent">5500+</span></div>
+                <div class="stat-number"><span class="stat-accent">100+</span></div>
                 <div class="stat-label">企业服务</div>
             </div>
             <div class="stat-item">
@@ -665,6 +674,18 @@
             <div class="pudong-training-photos">
                 <figure><img src="press-pudong-ai-training-talk.jpg" alt="桥比特在浦东国际人才驿站讲解 Agent 工作方式" loading="lazy" width="1440" height="1080"><figcaption>授课现场</figcaption></figure>
                 <figure><img src="press-pudong-ai-training-group.jpg" alt="浦东培训结束后，桥比特与现场学员合影" loading="lazy" width="1440" height="808"><figcaption>现场合影</figcaption></figure>
+            </div>
+        </article>
+        <article class="pudong-training press-film" aria-labelledby="pressFilmTitle">
+            <div class="pudong-training-copy">
+                <span class="pudong-training-label">出镜访谈 · 智能驾驶 · 00:44</span>
+                <h3 id="pressFilmTitle">AI「加速」高级别智能驾驶落地</h3>
+                <p>以「硅基物语」创始人、蔚来 ES8 创始版用户的身份出镜，聊大算力、端到端与群体智能如何推动自动驾驶落地。</p>
+            </div>
+            <div class="intro-video-wrapper">
+                <video controls playsinline preload="none" poster="poster-intro-video.webp" aria-label="桥比特智能驾驶访谈视频">
+                    <source src="intro-video.mp4" type="video/mp4">
+                </video>
             </div>
         </article>
         <div class="talks-resource" aria-labelledby="talksResourceTitle">
@@ -852,7 +873,7 @@
                 <div class="timeline-dot"></div>
                 <div class="timeline-era">ToB 时代</div>
                 <div class="timeline-title">独角兽集团业务负责人</div>
-                <div class="timeline-desc">累计服务 5500 家企业，深刻洞察企业级需求与痛点。</div>
+                <div class="timeline-desc">累计服务 100 家企业，深刻洞察企业级需求与痛点。</div>
             </div>
             <div class="timeline-item reveal">
                 <div class="timeline-dot"></div>
