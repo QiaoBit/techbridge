@@ -17,8 +17,9 @@ export default {
       return new Response('Not found', { status: 404 });
     }
 
-    const assetRequest = url.pathname === '/ByteDanceVerify.html'
-      ? new Request(new URL('/ByteDanceVerify', url), request)
+    const assetUrl = url.pathname === '/ByteDanceVerify.html' ? new URL('/ByteDanceVerify', url) : null;
+    const assetRequest = assetUrl || request.headers.has('range')
+      ? new Request(assetUrl ?? request.url, { method: request.method, headers: withoutRange(request.headers) })
       : request;
     const response = await env.ASSETS.fetch(assetRequest);
     if (response.status !== 404) return withByteRanges(request, response);
@@ -27,17 +28,29 @@ export default {
 };
 
 // Static assets ignore Range, but iOS Safari refuses to play video without 206 responses.
-function withByteRanges(request, response) {
-  const size = Number(response.headers.get('content-length'));
-  if (response.status !== 200 || !Number.isSafeInteger(size) || response.headers.has('content-encoding')) return response;
-
+// Inside the Worker the asset response may lack content-length, so fall back to buffering.
+async function withByteRanges(request, response) {
+  if (response.status !== 200 || response.headers.has('content-encoding')) return response;
+  const declared = response.headers.get('content-length');
+  const known = declared !== null && /^\d+$/.test(declared);
   const headers = new Headers(response.headers);
   headers.set('accept-ranges', 'bytes');
-  const range = parseRange(request.headers.get('range'), size);
-  if (!range) return new Response(response.body, { status: 200, headers });
+  const header = request.headers.get('range');
+  if (!header || !isSingleRange(header)) return new Response(response.body, { status: 200, headers });
+
+  let body = response.body;
+  let size = known ? Number(declared) : 0;
+  if (!known) {
+    if (request.method === 'HEAD') return new Response(null, { status: 200, headers });
+    const buffer = new Uint8Array(await response.arrayBuffer());
+    size = buffer.byteLength;
+    body = buffer;
+  }
+  const range = parseRange(header, size);
+  if (!range) return new Response(body, { status: 200, headers: withLength(headers, size) });
 
   if (range === 'unsatisfiable') {
-    response.body?.cancel();
+    if (known) response.body?.cancel();
     headers.set('content-range', `bytes */${size}`);
     headers.delete('content-length');
     return new Response(null, { status: 416, headers });
@@ -46,9 +59,28 @@ function withByteRanges(request, response) {
   const [start, end] = range;
   headers.set('content-range', `bytes ${start}-${end}/${size}`);
   headers.set('content-length', String(end - start + 1));
-  const body = request.method === 'HEAD' || !response.body ? null : sliceStream(response.body, start, end);
-  if (!body) response.body?.cancel();
-  return new Response(body, { status: 206, headers });
+  if (request.method === 'HEAD' || !body) {
+    if (known) response.body?.cancel();
+    return new Response(null, { status: 206, headers });
+  }
+  const part = known ? sliceStream(body, start, end) : body.subarray(start, end + 1);
+  return new Response(part, { status: 206, headers });
+}
+
+function withoutRange(source) {
+  const headers = new Headers(source);
+  headers.delete('range');
+  headers.delete('if-range');
+  return headers;
+}
+
+function withLength(headers, size) {
+  headers.set('content-length', String(size));
+  return headers;
+}
+
+function isSingleRange(header) {
+  return /^bytes=\d*-\d*$/.test(header.trim());
 }
 
 // Returns [start, end] (inclusive), 'unsatisfiable', or null to serve the whole file.

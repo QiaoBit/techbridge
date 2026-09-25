@@ -110,3 +110,33 @@ test('slices ranges that span several streamed chunks', async () => {
   assert.equal(response.status, 206);
   assert.deepEqual(await bytes(response), Array.from({ length: 31 }, (_, i) => 5 + i));
 });
+
+test('handles ranges when the asset response carries no content-length (as in production)', async () => {
+  let forwardedRange = 'unset';
+  const env = {
+    ASSETS: { fetch: async (req) => {
+      forwardedRange = req.headers.get('range');
+      return new Response(new ReadableStream({
+        start(controller) { controller.enqueue(video.slice(0, 40)); controller.enqueue(video.slice(40)); controller.close(); }
+      }), { headers: { 'content-type': 'video/mp4' } });
+    } },
+    LEGACY_SITE: { fetch: () => assert.fail('unexpected legacy call') }
+  };
+  const response = await worker.fetch(new Request('https://qiaobit.com/site-tour.mp4', { headers: { range: 'bytes=38-41' } }), env);
+  assert.equal(forwardedRange, null, 'the asset store must be asked for the whole file');
+  assert.equal(response.status, 206);
+  assert.equal(response.headers.get('content-range'), 'bytes 38-41/100');
+  assert.equal(response.headers.get('content-length'), '4');
+  assert.deepEqual(await bytes(response), [38, 39, 40, 41]);
+
+  const suffix = await worker.fetch(new Request('https://qiaobit.com/site-tour.mp4', { headers: { range: 'bytes=-3' } }), env);
+  assert.equal(suffix.headers.get('content-range'), 'bytes 97-99/100');
+  assert.deepEqual(await bytes(suffix), [97, 98, 99]);
+
+  const plain = await worker.fetch(new Request('https://qiaobit.com/'), {
+    ASSETS: { fetch: async () => new Response('page') },
+    LEGACY_SITE: { fetch: () => assert.fail('unexpected legacy call') }
+  });
+  assert.equal(plain.status, 200);
+  assert.equal(await plain.text(), 'page');
+});
