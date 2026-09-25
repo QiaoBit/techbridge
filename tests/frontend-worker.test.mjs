@@ -50,3 +50,63 @@ test('blocks source files and preserves the canonical-domain redirect', async ()
   assert.equal(response.status, 301);
   assert.equal(response.headers.get('location'), 'https://qiaobit.com/?ref=1');
 });
+
+const video = new Uint8Array(Array.from({ length: 100 }, (_, i) => i));
+const mediaEnv = () => ({
+  ASSETS: { fetch: async () => new Response(video, { headers: { 'content-type': 'video/mp4', 'content-length': '100', etag: '"v1"' } }) },
+  LEGACY_SITE: { fetch: () => assert.fail('unexpected legacy call') }
+});
+const bytes = async (response) => [...new Uint8Array(await response.arrayBuffer())];
+
+test('answers byte-range requests with 206 partial content so iOS Safari can play video', async () => {
+  const cases = [['bytes=0-1', 0, 1], ['bytes=10-19', 10, 19], ['bytes=90-', 90, 99], ['bytes=-5', 95, 99], ['bytes=95-500', 95, 99]];
+  for (const [range, start, end] of cases) {
+    const response = await worker.fetch(new Request('https://qiaobit.com/site-tour.mp4', { headers: { range } }), mediaEnv());
+    assert.equal(response.status, 206, range);
+    assert.equal(response.headers.get('content-range'), `bytes ${start}-${end}/100`, range);
+    assert.equal(response.headers.get('content-length'), String(end - start + 1), range);
+    assert.equal(response.headers.get('accept-ranges'), 'bytes');
+    assert.equal(response.headers.get('content-type'), 'video/mp4');
+    assert.deepEqual(await bytes(response), Array.from({ length: end - start + 1 }, (_, i) => start + i), range);
+  }
+});
+
+test('advertises range support on full responses and rejects unsatisfiable ranges', async () => {
+  const full = await worker.fetch(new Request('https://qiaobit.com/site-tour.mp4'), mediaEnv());
+  assert.equal(full.status, 200);
+  assert.equal(full.headers.get('accept-ranges'), 'bytes');
+  assert.equal((await bytes(full)).length, 100);
+
+  const tooFar = await worker.fetch(new Request('https://qiaobit.com/site-tour.mp4', { headers: { range: 'bytes=100-' } }), mediaEnv());
+  assert.equal(tooFar.status, 416);
+  assert.equal(tooFar.headers.get('content-range'), 'bytes */100');
+
+  // Multi-range and malformed headers fall back to the full file.
+  for (const range of ['bytes=0-1,5-6', 'items=0-1', 'bytes=abc']) {
+    const response = await worker.fetch(new Request('https://qiaobit.com/site-tour.mp4', { headers: { range } }), mediaEnv());
+    assert.equal(response.status, 200, range);
+  }
+});
+
+test('answers HEAD range requests without a body', async () => {
+  const response = await worker.fetch(new Request('https://qiaobit.com/site-tour.mp4', { method: 'HEAD', headers: { range: 'bytes=0-1' } }), {
+    ASSETS: { fetch: async () => new Response(null, { headers: { 'content-type': 'video/mp4', 'content-length': '100' } }) },
+    LEGACY_SITE: { fetch: () => assert.fail('unexpected legacy call') }
+  });
+  assert.equal(response.status, 206);
+  assert.equal(response.headers.get('content-range'), 'bytes 0-1/100');
+  assert.equal(response.body, null);
+});
+
+test('slices ranges that span several streamed chunks', async () => {
+  const chunks = [video.slice(0, 7), video.slice(7, 30), video.slice(30, 31), video.slice(31, 100)];
+  const env = {
+    ASSETS: { fetch: async () => new Response(new ReadableStream({
+      start(controller) { chunks.forEach(chunk => controller.enqueue(chunk)); controller.close(); }
+    }), { headers: { 'content-type': 'video/mp4', 'content-length': '100' } }) },
+    LEGACY_SITE: { fetch: () => assert.fail('unexpected legacy call') }
+  };
+  const response = await worker.fetch(new Request('https://qiaobit.com/site-tour.mp4', { headers: { range: 'bytes=5-35' } }), env);
+  assert.equal(response.status, 206);
+  assert.deepEqual(await bytes(response), Array.from({ length: 31 }, (_, i) => 5 + i));
+});
