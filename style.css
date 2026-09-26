@@ -3073,6 +3073,18 @@ a { text-decoration: none; color: inherit; }
     border-top: 1px solid var(--border-dark);
 }
 
+/* 触屏设备没有 ESC / 方向键，键盘提示不显示 */
+@media (hover: none) {
+    .cmd-palette-hint { display: none; }
+}
+
+.cmd-palette-empty {
+    padding: 18px 16px;
+    font-size: 13px;
+    color: var(--text-warm-grey);
+    text-align: center;
+}
+
 /* Typewriter cursor */
 .typewriter-cursor {
     display: inline-block;
@@ -3229,6 +3241,9 @@ footer::before {
 .reveal-delay-1 { transition-delay: 0.15s; }
 .reveal-delay-2 { transition-delay: 0.3s; }
 .reveal-delay-3 { transition-delay: 0.45s; }
+
+/* 刷新 / 返回恢复滚动位置时，已经看过的内容直接出现，不再重播淡入 */
+.reveal-instant { transition: none !important; }
 
 /* Section dividers */
 .section-divider {
@@ -3523,6 +3538,38 @@ body.btx-chat-open .floating-subscribe {
     opacity: 0;
     transform: translateY(18px) scale(0.96);
     pointer-events: none;
+}
+
+/* 手机菜单打开时，右下角浮层让位，不盖住菜单 */
+body.mobile-menu-open .floating-subscribe,
+body.mobile-menu-open .back-to-top {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+/* 气泡收起后只留头像可点，透明区域不再挡住正文；悬停 / 聚焦时展开 */
+@media (min-width: 769px) {
+    .floating-subscribe.is-collapsed {
+        pointer-events: none;
+    }
+    .floating-subscribe.is-collapsed .floating-subscribe-mascot {
+        pointer-events: auto;
+    }
+    .floating-subscribe.is-collapsed .floating-subscribe-copy {
+        opacity: 0;
+        transform: translateX(12px);
+        transition: opacity 0.3s ease, transform 0.3s ease, border-color 0.25s ease, background 0.25s ease;
+    }
+    .floating-subscribe.is-collapsed:hover .floating-subscribe-copy,
+    .floating-subscribe.is-collapsed:focus-visible .floating-subscribe-copy {
+        opacity: 1;
+        transform: translateX(-3px);
+        pointer-events: auto;
+    }
+    .floating-subscribe.is-collapsed.is-context-hidden .floating-subscribe-mascot {
+        pointer-events: none;
+    }
 }
 
 .btx-chat-layer {
@@ -5962,11 +6009,8 @@ button.connect-btn {
 /* Anchor offset so fixed navbar doesn't cover section titles */
 section[id] { scroll-margin-top: 72px; }
 
-/* Skip layout/paint work for deep sections until they approach the viewport. */
-body > section:not(#hero) {
-    content-visibility: auto;
-    contain-intrinsic-size: auto 900px;
-}
+/* 不对区块用 content-visibility:auto：占位高度与真实高度不一致，
+   会让锚点跳转落点漂移、返回页面时滚动位置恢复错位。 */
 
 /* --- Nav scrollspy --- */
 .nav-link { position: relative; }

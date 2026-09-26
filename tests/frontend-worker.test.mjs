@@ -140,3 +140,41 @@ test('handles ranges when the asset response carries no content-length (as in pr
   assert.equal(plain.status, 200);
   assert.equal(await plain.text(), 'page');
 });
+
+test('shows the branded 404 page to browsers when neither assets nor legacy backend have the page', async () => {
+  const requested = [];
+  const env = {
+    ASSETS: { fetch: async (req) => {
+      const { pathname } = new URL(req.url);
+      requested.push(pathname);
+      if (pathname === '/404') return new Response('<h1>branded 404</h1>', { headers: { 'content-type': 'text/html; charset=utf-8' } });
+      return new Response('missing', { status: 404 });
+    } },
+    LEGACY_SITE: { fetch: async () => new Response(null, { status: 404 }) }
+  };
+  const response = await worker.fetch(new Request('https://qiaobit.com/no-such-page', {
+    headers: { accept: 'text/html,application/xhtml+xml' }
+  }), env);
+  assert.equal(response.status, 404);
+  assert.equal(response.headers.get('content-type'), 'text/html; charset=utf-8');
+  assert.equal(response.headers.get('cache-control'), 'no-store');
+  assert.equal(await response.text(), '<h1>branded 404</h1>');
+  assert.deepEqual(requested, ['/no-such-page', '/404']);
+});
+
+test('keeps plain legacy 404s for non-HTML requests and when the 404 page is unavailable', async () => {
+  const legacy404 = () => new Response('legacy missing', { status: 404 });
+  const missingAsset = await worker.fetch(new Request('https://qiaobit.com/missing.js', { headers: { accept: '*/*' } }), {
+    ASSETS: { fetch: async () => new Response('missing', { status: 404 }) },
+    LEGACY_SITE: { fetch: async () => legacy404() }
+  });
+  assert.equal(missingAsset.status, 404);
+  assert.equal(await missingAsset.text(), 'legacy missing');
+
+  const noPage = await worker.fetch(new Request('https://qiaobit.com/no-such-page', { headers: { accept: 'text/html' } }), {
+    ASSETS: { fetch: async () => new Response('missing', { status: 404 }) },
+    LEGACY_SITE: { fetch: async () => legacy404() }
+  });
+  assert.equal(noPage.status, 404);
+  assert.equal(await noPage.text(), 'legacy missing');
+});

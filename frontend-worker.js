@@ -23,9 +23,27 @@ export default {
       : request;
     const response = await env.ASSETS.fetch(assetRequest);
     if (response.status !== 404) return withByteRanges(request, response);
-    return env.LEGACY_SITE.fetch(request);
+    const legacy = await env.LEGACY_SITE.fetch(request);
+    if (legacy.status !== 404 || !wantsHtml(request)) return legacy;
+    const page = await notFoundPage(request, env);
+    if (!page) return legacy;
+    legacy.body?.cancel();
+    return page;
   }
 };
+
+function wantsHtml(request) {
+  return (request.headers.get('accept') || '').includes('text/html');
+}
+
+// 旧后端也没有这个页面时，浏览器看到的是品牌 404 页，而不是空白页。
+async function notFoundPage(request, env) {
+  const page = await env.ASSETS.fetch(new Request(new URL('/404', request.url), { method: request.method }));
+  if (page.status !== 200) return null;
+  const headers = new Headers(page.headers);
+  headers.set('cache-control', 'no-store');
+  return new Response(page.body, { status: 404, headers });
+}
 
 // Static assets ignore Range, but iOS Safari refuses to play video without 206 responses.
 // Inside the Worker the asset response may lack content-length, so fall back to buffering.

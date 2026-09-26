@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>页面不存在｜桥比特 QiaoBit</title>
+    <meta name="robots" content="noindex">
+    <meta name="theme-color" content="#1A1A18">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32.png">
+    <style>
+        :root {
+            --bg: #1A1A18;
+            --text: #FFFCF8;
+            --muted: #8A8580;
+            --line: rgba(255, 252, 248, 0.12);
+            --orange: #E95D21;
+            --green: #20B2AA;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { height: 100%; }
+        body {
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg);
+            color: var(--text);
+            font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+            -webkit-font-smoothing: antialiased;
+        }
+        a { color: inherit; text-decoration: none; }
+        header {
+            display: flex;
+            align-items: center;
+            height: 72px;
+            padding: 0 32px;
+            border-bottom: 1px solid var(--line);
+        }
+        .logo { display: inline-flex; align-items: center; gap: 12px; font-weight: 800; letter-spacing: 1px; }
+        .logo img { width: 32px; height: 32px; }
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            width: min(100% - 32px, 720px);
+            margin: 0 auto;
+            padding: 64px 0;
+        }
+        .label {
+            font-family: ui-monospace, "SFMono-Regular", Menlo, monospace;
+            font-size: 12px;
+            letter-spacing: 2px;
+            color: var(--orange);
+        }
+        .code {
+            margin: 16px 0 8px;
+            font-size: clamp(88px, 22vw, 160px);
+            font-weight: 800;
+            line-height: 1;
+            letter-spacing: -2px;
+        }
+        .code span:first-child { color: var(--orange); }
+        .code span:last-child { color: var(--green); }
+        h1 { font-size: clamp(24px, 5vw, 32px); line-height: 1.35; }
+        p { margin-top: 12px; font-size: 16px; line-height: 1.8; color: var(--muted); }
+        nav { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 36px; }
+        nav a {
+            display: inline-flex;
+            align-items: center;
+            min-height: 44px;
+            padding: 0 20px;
+            border: 1px solid var(--line);
+            border-radius: 999px;
+            font-size: 15px;
+            transition: border-color 0.2s, background 0.2s;
+        }
+        nav a:hover { border-color: var(--orange); }
+        nav a:focus-visible { outline: 2px solid var(--green); outline-offset: 3px; }
+        nav a.primary { background: var(--orange); border-color: var(--orange); }
+        nav a.primary:hover { background: #d4521b; }
+        footer { padding: 24px 32px; font-size: 12px; color: var(--muted); border-top: 1px solid var(--line); }
+        @media (max-width: 600px) {
+            header { padding: 0 16px; height: 64px; }
+            footer { padding: 20px 16px; }
+            nav a { flex: 1 1 calc(50% - 6px); justify-content: center; padding: 0 12px; }
+            nav a.primary { flex-basis: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a class="logo" href="/" aria-label="返回 Tech Bridge 桥比特首页">
+            <img src="/favicon.svg" alt="" width="32" height="32">
+            <span>TECH BRIDGE</span>
+        </a>
+    </header>
+    <main>
+        <span class="label">404 · PAGE NOT FOUND</span>
+        <div class="code" aria-hidden="true"><span>40</span><span>4</span></div>
+        <h1>这个页面不存在。</h1>
+        <p>地址可能输错了，或者页面已经搬走。可以从下面这些入口继续逛。</p>
+        <nav aria-label="继续浏览">
+            <a class="primary" href="/">返回首页</a>
+            <a href="/#projects">我造的产品</a>
+            <a href="/insights/">实战方法</a>
+            <a href="/#collab">合作方式</a>
+        </nav>
+    </main>
+    <footer>© 2026 Tech Bridge · 桥比特 QiaoBit</footer>
+</body>
+</html>

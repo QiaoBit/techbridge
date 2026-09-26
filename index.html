@@ -50,7 +50,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <!-- 字重按实际用量裁剪：去掉未使用的 Mono 300、Sans SC 300/900、Serif SC 900，显著减少 CJK 字体加载 -->
     <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;700&family=Noto+Sans+SC:wght@400;700&family=Noto+Serif+SC:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="style.css?v=37">
+    <link rel="stylesheet" href="style.css?v=38">
     <link rel="stylesheet" href="brand-motion.css?v=1">
     <link rel="stylesheet" href="jarvis-hud.css?v=6">
 
@@ -252,7 +252,7 @@
     <!-- Cmd+K Command Palette -->
     <div class="cmd-palette-overlay" id="cmdPalette">
         <div class="cmd-palette">
-            <input class="cmd-palette-input" id="cmdInput" placeholder="输入命令或搜索..." autocomplete="off">
+            <input class="cmd-palette-input" id="cmdInput" placeholder="输入关键词，快速跳转…" aria-label="输入关键词，快速跳转" autocomplete="off">
             <div class="cmd-palette-list" id="cmdList"></div>
             <div class="cmd-palette-hint">ESC 关闭 · ↑↓ 导航 · Enter 执行</div>
         </div>
@@ -285,20 +285,19 @@
                 <!-- Telegram -->
                 <a href="https://t.me/Shirleyclaw" title="Telegram" aria-label="Telegram" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><use href="#icon-telegram"/></svg></a>
             </div>
-            <button class="cmdk-trigger" id="cmdkTrigger" type="button" aria-label="打开命令面板（搜索 / 快速跳转）" title="命令面板 ⌘K">
+            <button class="cmdk-trigger" id="cmdkTrigger" type="button" aria-label="打开快速跳转" title="快速跳转 ⌘K">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
                 <span class="cmdk-kbd">⌘K</span>
             </button>
-            <button class="lang-toggle" id="langToggle">EN</button>
         </div>
-        <button class="hamburger" id="hamburgerBtn">
+        <button class="hamburger" id="hamburgerBtn" type="button" aria-label="打开菜单" aria-expanded="false" aria-controls="mobileMenu">
             <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
     </nav>
 
     <!-- Mobile Menu -->
     <div class="mobile-menu" id="mobileMenu">
-        <button class="mobile-menu-close" id="mobileMenuClose">
+        <button class="mobile-menu-close" id="mobileMenuClose" type="button" aria-label="关闭菜单">
             <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
         <a href="#about" class="mobile-menu-link">About</a>
@@ -306,8 +305,7 @@
         <a href="#topics" class="mobile-menu-link">Topics</a>
         <a href="/insights/" class="mobile-menu-link">Insights</a>
         <a href="#collab" class="mobile-menu-link">Collab</a>
-        <button class="mobile-menu-link mobile-cmdk" id="cmdkTriggerMobile" type="button">⌘ 快速跳转 / 搜索</button>
-        <button class="mobile-lang-toggle" id="mobileLangToggle">EN / 中</button>
+        <button class="mobile-menu-link mobile-cmdk" id="cmdkTriggerMobile" type="button">快速跳转</button>
         <div class="mobile-menu-social">
             <a href="https://www.youtube.com/@The-Tech-Bridge" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><use href="#icon-youtube"/></svg></a>
             <a href="https://x.com/QiaoBitX" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><use href="#icon-x"/></svg></a>
@@ -650,7 +648,7 @@
                 <strong>NIO Radio</strong>
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
             </a>
-            <a class="seen-in-item seen-in-item-link" href="https://www.pec.asia/2024/conference" target="_blank" rel="noopener noreferrer" aria-label="访问 PEC AI 创新者大会官网">
+            <a class="seen-in-item seen-in-item-link" href="https://www.pec.asia/2025/conference" target="_blank" rel="noopener noreferrer" aria-label="访问 PEC 2025 AI 创新者大会官网">
                 <span class="seen-in-item-kind">大会活动</span>
                 <strong>PEC AI 创新者大会</strong>
                 <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 17 17 7M9 7h8v8"/></svg>
@@ -1303,8 +1301,8 @@
             <a href="https://space.bilibili.com/516103235" class="footer-icon-link" title="Bilibili" aria-label="Bilibili" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><use href="#icon-bilibili"/></svg></a>
             <!-- X -->
             <a href="https://x.com/QiaoBitX" class="footer-icon-link" title="X" aria-label="X" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><use href="#icon-x"/></svg></a>
-            <!-- TikTok/抖音 -->
-            <a href="https://www.tiktok.com/@techbridgez" class="footer-icon-link" title="抖音" aria-label="抖音" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><use href="#icon-tiktok"/></svg></a>
+            <!-- TikTok -->
+            <a href="https://www.tiktok.com/@techbridgez" class="footer-icon-link" title="TikTok" aria-label="TikTok" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><use href="#icon-tiktok"/></svg></a>
             <!-- Podcast -->
             <a href="https://www.xiaoyuzhoufm.com/podcast/69a40d9f7dca8f3bbc511770" class="footer-icon-link" title="小宇宙 · 硅基物语" aria-label="在小宇宙收听硅基物语播客" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24"><use href="#icon-podcast"/></svg></a>
             <!-- Telegram -->
@@ -1389,11 +1387,11 @@
 
     <!-- WeChat Modal -->
     <div class="wechat-modal" id="wechatModal">
-        <div class="wechat-modal-content">
-            <button class="wechat-modal-close" id="wechatModalClose">
+        <div class="wechat-modal-content" role="dialog" aria-modal="true" aria-labelledby="wechatModalTitle">
+            <button class="wechat-modal-close" id="wechatModalClose" type="button" aria-label="关闭企业微信二维码">
                 <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
-            <div class="wechat-modal-title">添加企业微信</div>
+            <div class="wechat-modal-title" id="wechatModalTitle">添加企业微信</div>
             <div class="wechat-modal-qr"><img src="wechat-qr.png?v=20260716-linxueni-new" alt="林雪妮企业微信二维码" class="wechat-qr-img" width="636" height="1280" loading="lazy" decoding="async"></div>
             <div class="wechat-modal-hint">扫码添加我的企业微信</div>
         </div>
@@ -1401,11 +1399,11 @@
 
     <!-- Mini App Modal -->
     <div class="wechat-modal miniapp-modal" id="miniappModal">
-        <div class="wechat-modal-content">
-            <button class="wechat-modal-close" id="miniappModalClose" aria-label="关闭小程序二维码">
+        <div class="wechat-modal-content" role="dialog" aria-modal="true" aria-labelledby="miniappModalTitle">
+            <button class="wechat-modal-close" id="miniappModalClose" type="button" aria-label="关闭小程序二维码">
                 <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
             </button>
-            <div class="wechat-modal-title">电商AI素材通</div>
+            <div class="wechat-modal-title" id="miniappModalTitle">电商AI素材通</div>
             <div class="wechat-modal-qr"><img src="sucaitong-miniapp-qr.png" alt="电商AI素材通小程序二维码" class="wechat-qr-img" width="430" height="430" loading="lazy" decoding="async"></div>
             <div class="wechat-modal-hint">微信扫码进入电商AI素材通小程序</div>
         </div>
@@ -1523,7 +1521,7 @@
     </div>
 
     <script src="analytics.js?v=1"></script>
-    <script src="main.js?v=30"></script>
+    <script src="main.js?v=31"></script>
     <script type="module" src="brand-motion.js?v=1"></script>
     <script type="module" src="btx-bot.js?v=2"></script>
     <script>
@@ -1540,7 +1538,7 @@
             if (loading) return;
             loading = true;
             var script = document.createElement('script');
-            script.src = 'jarvis-hud.js?v=9';
+            script.src = 'jarvis-hud.js?v=10';
             script.async = true;
             script.onload = function() {
                 ready = true;

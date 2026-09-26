@@ -29,6 +29,28 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.1 });
 document.querySelectorAll('.reveal, .section-divider').forEach(el => observer.observe(el));
 
+// 刷新 / 返回时浏览器会恢复滚动位置：视口内及以上的内容直接显示、不播淡入，
+// 不依赖 IntersectionObserver 的回调时机，避免整屏空白。
+(function() {
+    var nav = performance.getEntriesByType ? performance.getEntriesByType('navigation')[0] : null;
+    if (!nav || (nav.type !== 'reload' && nav.type !== 'back_forward')) return;
+
+    function revealPassed() {
+        if (window.scrollY < 1) return;
+        var limit = window.innerHeight;
+        document.querySelectorAll('.reveal:not(.visible), .section-divider:not(.visible)').forEach(function(el) {
+            if (el.getBoundingClientRect().top < limit) el.classList.add('reveal-instant', 'visible');
+        });
+    }
+
+    revealPassed();
+    window.addEventListener('scroll', revealPassed, { passive: true });
+    window.addEventListener('load', function() {
+        revealPassed();
+        window.setTimeout(function() { window.removeEventListener('scroll', revealPassed); }, 1500);
+    });
+})();
+
 // === 1. Counter Animation ===
 (function() {
     const counters = document.querySelectorAll('.stat-accent');
@@ -89,10 +111,9 @@ document.querySelectorAll('.reveal, .section-divider').forEach(el => observer.ob
         setLang(isZh ? 'en' : 'zh');
     }
 
-    // Restore saved language preference
+    // EN 入口暂时下线（全站翻译完成前固定中文）：清掉旧访客存下的 en，避免打开就是半中半英
     try {
-        var saved = localStorage.getItem('tb-lang');
-        if (saved === 'en') setLang('en');
+        if (localStorage.getItem('tb-lang') === 'en') localStorage.removeItem('tb-lang');
     } catch(e) {}
 
     // Bind lang toggle buttons (desktop + mobile)
@@ -132,6 +153,19 @@ document.querySelectorAll('.reveal, .section-divider').forEach(el => observer.ob
     menu.querySelectorAll('.mobile-menu-link').forEach(function(link) {
         link.addEventListener('click', function() { menu.classList.remove('open'); });
     });
+
+    // 菜单可能被多处关闭（链接、ESC、快速跳转），统一按 class 同步状态：
+    // 菜单打开时隐藏右下角浮层，避免盖住菜单里的社交图标。
+    var wasOpen = false;
+    new MutationObserver(function() {
+        var isOpen = menu.classList.contains('open');
+        if (isOpen === wasOpen) return;
+        wasOpen = isOpen;
+        document.body.classList.toggle('mobile-menu-open', isOpen);
+        if (openBtn) openBtn.setAttribute('aria-expanded', String(isOpen));
+        if (isOpen && closeBtn) closeBtn.focus();
+        else if (!isOpen && openBtn && menu.contains(document.activeElement)) openBtn.focus();
+    }).observe(menu, { attributes: true, attributeFilter: ['class'] });
 })();
 
 // === 6. Unified Video Player (mutual exclusion · closable · keyboard-accessible) ===
@@ -263,6 +297,37 @@ document.querySelectorAll('.reveal, .section-divider').forEach(el => observer.ob
         if (e.target === modal) modal.classList.remove('open');
     });
 })();
+
+// === 6d. 二维码弹窗焦点管理 ===
+// 弹窗会被按钮、快速跳转、ESC、点背景等多处开关，统一按 class 同步：
+// 打开时焦点进入关闭按钮，Tab 不跑到页面后面，关闭后焦点回到原来的位置。
+['wechatModal', 'miniappModal'].forEach(function(id) {
+    var modal = document.getElementById(id);
+    if (!modal) return;
+    var closeBtn = modal.querySelector('.wechat-modal-close');
+    var previousFocus = null;
+    var wasOpen = false;
+
+    new MutationObserver(function() {
+        var isOpen = modal.classList.contains('open');
+        if (isOpen === wasOpen) return;
+        wasOpen = isOpen;
+        if (isOpen) {
+            previousFocus = document.activeElement;
+            if (closeBtn) closeBtn.focus({ preventScroll: true });
+        } else if (previousFocus && previousFocus.focus) {
+            previousFocus.focus({ preventScroll: true });
+            previousFocus = null;
+        }
+    }).observe(modal, { attributes: true, attributeFilter: ['class'] });
+
+    modal.addEventListener('keydown', function(e) {
+        if (e.key === 'Tab' && closeBtn) {
+            e.preventDefault();
+            closeBtn.focus();
+        }
+    });
+});
 
 // === 6e. Cooperation inquiry ===
 (function() {
@@ -829,6 +894,22 @@ document.querySelectorAll('.reveal, .section-divider').forEach(el => observer.ob
     panel.addEventListener('pointermove', moveSheetDrag);
     panel.addEventListener('pointerup', endSheetDrag);
     panel.addEventListener('pointercancel', endSheetDrag);
+
+    // 文字气泡只在本次访问第一次出现时展示几秒，之后收成头像，悬停 / 聚焦时再展开，
+    // 避免长期压住正文。
+    var BUBBLE_SEEN_KEY = 'tb-btx-bubble-seen';
+    var bubbleTimer = null;
+    function collapseBubble() {
+        trigger.classList.add('is-collapsed');
+        try { sessionStorage.setItem(BUBBLE_SEEN_KEY, '1'); } catch (e) {}
+    }
+    try {
+        if (sessionStorage.getItem(BUBBLE_SEEN_KEY) === '1') trigger.classList.add('is-collapsed');
+    } catch (e) {}
+    trigger.addEventListener('btx:reveal', function() {
+        if (trigger.classList.contains('is-collapsed') || bubbleTimer) return;
+        bubbleTimer = window.setTimeout(collapseBubble, 6000);
+    });
 
     var hero = document.getElementById('hero');
     if (hero && 'IntersectionObserver' in window) {

@@ -1105,9 +1105,19 @@ window.jarvisAR = window.jarvisAR || {
             const target = document.querySelector(href);
             if (!target) return;
             e.preventDefault();
-            const offset = 72; // navbar height
+            const navbar = document.querySelector('.navbar');
+            const offset = navbar ? navbar.offsetHeight : 72;
             const y = target.getBoundingClientRect().top + window.scrollY - offset;
             window.scrollTo({ top: y, behavior: 'smooth' });
+
+            // 滚动途中图片加载会改变高度：结束后若目标偏了就补一次；用户中途自己滑动过则不干预
+            const settle = () => {
+                if (Math.abs(window.scrollY - y) > 4) return;
+                const drift = target.getBoundingClientRect().top - offset;
+                if (Math.abs(drift) > 2) window.scrollTo({ top: window.scrollY + drift, behavior: 'smooth' });
+            };
+            if ('onscrollend' in window) window.addEventListener('scrollend', settle, { once: true });
+            else window.setTimeout(settle, 900);
         });
     });
 })();
@@ -1501,23 +1511,34 @@ window.jarvisAR = window.jarvisAR || {
     const input = document.getElementById('cmdInput');
     const list = document.getElementById('cmdList');
 
+    const goTo = id => { const el = document.getElementById(id); if (el) el.scrollIntoView({behavior:'smooth'}); };
+    const openLink = url => window.open(url, '_blank', 'noopener');
+    // keywords 只参与匹配、不显示，让“产品”“文章”“联系”这类说法也能找到入口
     const commands = [
-        { icon: '🏠', label: '首页', action: () => { window.scrollTo({top:0,behavior:'smooth'}); } },
-        { icon: '👤', label: '关于我', action: () => document.getElementById('about').scrollIntoView({behavior:'smooth'}) },
-        { icon: '📡', label: '内容领域', action: () => document.getElementById('topics').scrollIntoView({behavior:'smooth'}) },
-        { icon: '🤝', label: '合作', action: () => document.getElementById('collab').scrollIntoView({behavior:'smooth'}) },
-        { icon: '▶️', label: 'YouTube 频道', shortcut: '↗', action: () => window.open('https://www.youtube.com/@The-Tech-Bridge','_blank') },
-        { icon: '📺', label: 'Bilibili', shortcut: '↗', action: () => window.open('https://b23.tv/jvOokV7','_blank') },
-        { icon: '𝕏', label: 'X / Twitter', shortcut: '↗', action: () => window.open('https://x.com/QiaoBitX','_blank') },
-        { icon: '🎵', label: 'TikTok / 抖音', shortcut: '↗', action: () => window.open('https://www.tiktok.com/@techbridgez','_blank') },
-        { icon: '🌐', label: '切换语言 / Toggle Language', action: () => { if (window._toggleLang) window._toggleLang(); } },
-        { icon: '💬', label: '添加微信', action: () => { const m = document.querySelector('.wechat-modal'); if(m) m.classList.add('open'); } },
+        { icon: '🏠', label: '首页', keywords: 'home top 顶部', action: () => { window.scrollTo({top:0,behavior:'smooth'}); } },
+        { icon: '👤', label: '关于我', keywords: 'about 介绍 桥比特', action: () => goTo('about') },
+        { icon: '🧩', label: '我造的产品', keywords: 'products projects 产品 项目 硬件', action: () => goTo('projects') },
+        { icon: '📡', label: '内容领域', keywords: 'topics 科技前沿 人工智能 数码 汽车', action: () => goTo('topics') },
+        { icon: '🎙️', label: '媒体报道与公开活动', keywords: 'press 报道 演讲 活动', action: () => goTo('press') },
+        { icon: '📝', label: '实战方法（文章）', keywords: 'insights 文章 方法 出海 落地', action: () => { window.location.href = '/insights/'; } },
+        { icon: '🤝', label: '合作方式', keywords: 'collab 合作 订阅 价格', action: () => goTo('collab') },
+        { icon: '📨', label: '提交合作需求', keywords: 'contact 联系 表单 申请 商务', action: () => { const b = document.querySelector('.open-inquiry-link'); if (b) b.click(); } },
+        { icon: '💬', label: '添加企业微信', keywords: 'wechat 微信 联系', action: () => { const m = document.getElementById('wechatModal'); if (m) m.classList.add('open'); } },
+        { icon: '🎧', label: '播客 · 硅基物语', shortcut: '↗', keywords: 'podcast 小宇宙 播客', action: () => openLink('https://www.xiaoyuzhoufm.com/podcast/69a40d9f7dca8f3bbc511770') },
+        { icon: '📺', label: 'Bilibili', shortcut: '↗', keywords: 'b站 哔哩哔哩 视频', action: () => openLink('https://space.bilibili.com/516103235') },
+        { icon: '▶️', label: 'YouTube 频道', shortcut: '↗', keywords: 'youtube 视频', action: () => openLink('https://www.youtube.com/@The-Tech-Bridge') },
+        { icon: '𝕏', label: 'X / Twitter', shortcut: '↗', keywords: 'twitter', action: () => openLink('https://x.com/QiaoBitX') },
+        { icon: '🎵', label: 'TikTok', shortcut: '↗', keywords: 'tiktok 短视频', action: () => openLink('https://www.tiktok.com/@techbridgez') },
     ];
 
     let activeIdx = 0;
     let filtered = [...commands];
 
     function render() {
+        if (!filtered.length) {
+            list.innerHTML = '<div class="cmd-palette-empty">没有匹配的入口，换个关键词试试</div>';
+            return;
+        }
         list.innerHTML = filtered.map((cmd, i) => `
             <div class="cmd-palette-item ${i === activeIdx ? 'active' : ''}" data-idx="${i}">
                 <span class="cmd-icon">${cmd.icon}</span>
@@ -1579,8 +1600,8 @@ window.jarvisAR = window.jarvisAR || {
     overlay.addEventListener('click', e => { if (e.target === overlay) close(); });
 
     input.addEventListener('input', () => {
-        const q = input.value.toLowerCase();
-        filtered = commands.filter(c => c.label.toLowerCase().includes(q));
+        const q = input.value.trim().toLowerCase();
+        filtered = commands.filter(c => (c.label + ' ' + (c.keywords || '')).toLowerCase().includes(q));
         activeIdx = 0;
         render();
     });
