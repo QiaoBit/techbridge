@@ -41,12 +41,13 @@
     content: "";
     position: absolute;
     inset: 0;
-    background: rgba(10,10,9,.68);
+    /* 文字贴底排版：底部压暗，保证亮色照片上的标题和导语可读 */
+    background: linear-gradient(to top, rgba(10,10,9,.94) 0%, rgba(10,10,9,.82) 45%, rgba(10,10,9,.6) 100%);
 }
 
 .insights-hero-copy { position: relative; z-index: 1; width: min(930px, 100%); }
 .insights-kicker { color: #e95d21; font-family: "JetBrains Mono", monospace; font-size: 11px; letter-spacing: 1.6px; }
-.insights-hero h1 { margin: 22px 0 24px; max-width: 980px; font-size: clamp(48px, 7vw, 92px); line-height: 1.06; letter-spacing: 0; }
+.insights-hero h1 { margin: 22px 0 24px; max-width: 980px; font-size: clamp(48px, 7vw, 92px); line-height: 1.06; letter-spacing: 0; text-wrap: pretty; }
 .insights-hero p { max-width: 760px; color: #d5cec3; font-size: 18px; line-height: 1.9; }
 .insights-meta { margin-top: 30px; display: flex; flex-wrap: wrap; gap: 12px 28px; color: #aaa39a; font-family: "JetBrains Mono", monospace; font-size: 10px; }
 

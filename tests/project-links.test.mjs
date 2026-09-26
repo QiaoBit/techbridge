@@ -60,7 +60,7 @@ test('packs the portfolio into full-width ends and six pairs without a lone cell
 test('prioritizes purchase-ready entries and keeps non-paid projects together below', () => {
   const grid = html.split('<div class="projects-grid">')[1].split('<button class="projects-toggle"')[0];
   const names = [...grid.matchAll(/class="project-name">([^<]+)/g)].map(match => match[1]);
-  assert.deepEqual(names, ['硅基物语', 'AI Skills 年度买手服务', 'ChatGPT 订阅购买 · GamsGo', '择偶定位', '齐件', '容易发', '电商AI素材通', '旷野 Wayfar', 'Kairos', '如果世界', '虚拟偶像 林雪妮', '超模算力', 'Novart', '地球 Online']);
+  assert.deepEqual(names, ['硅基物语小程序', 'AI Skills 年度买手服务', 'ChatGPT 订阅购买 · GamsGo', '择偶定位', '齐件', '容易发', '电商AI素材通', '旷野 Wayfar', 'Kairos', '如果世界', '虚拟偶像 林雪妮', '超模算力', 'Novart', '地球 Online']);
   const schema = JSON.parse(html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/)[1]);
   const items = schema['@graph'].find(item => item['@id'] === 'https://qiaobit.com/#projects').itemListElement;
   assert.deepEqual(items.map(item => item.name), names.filter(name => !name.includes('GamsGo')));

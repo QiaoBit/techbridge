@@ -300,7 +300,7 @@ document.querySelectorAll('.reveal, .section-divider').forEach(el => observer.ob
 
 // === 6d. 二维码弹窗焦点管理 ===
 // 弹窗会被按钮、快速跳转、ESC、点背景等多处开关，统一按 class 同步：
-// 打开时焦点进入关闭按钮，Tab 不跑到页面后面，关闭后焦点回到原来的位置。
+// 打开时才加载二维码图片；焦点进入关闭按钮，Tab 不跑到页面后面，关闭后焦点回到原来的位置。
 ['wechatModal', 'miniappModal'].forEach(function(id) {
     var modal = document.getElementById(id);
     if (!modal) return;
@@ -313,6 +313,10 @@ document.querySelectorAll('.reveal, .section-divider').forEach(el => observer.ob
         if (isOpen === wasOpen) return;
         wasOpen = isOpen;
         if (isOpen) {
+            modal.querySelectorAll('img[data-src]').forEach(function(img) {
+                img.src = img.getAttribute('data-src');
+                img.removeAttribute('data-src');
+            });
             previousFocus = document.activeElement;
             if (closeBtn) closeBtn.focus({ preventScroll: true });
         } else if (previousFocus && previousFocus.focus) {
@@ -350,7 +354,11 @@ document.querySelectorAll('.reveal, .section-divider').forEach(el => observer.ob
         return window.location.protocol === 'file:' || /^(localhost|127\.0\.0\.1)$/.test(window.location.hostname);
     }
 
-    function openModal() {
+    function openModal(type) {
+        if (type) {
+            var option = form.querySelector('input[name="cooperationType"][value="' + type + '"]');
+            if (option) option.checked = true;
+        }
         previousFocus = document.activeElement;
         modal.classList.add('open');
         modal.setAttribute('aria-hidden', 'false');
@@ -387,7 +395,7 @@ document.querySelectorAll('.reveal, .section-divider').forEach(el => observer.ob
     openButtons.forEach(function(button) {
         button.addEventListener('click', function(event) {
             event.preventDefault();
-            openModal();
+            openModal(button.getAttribute('data-inquiry-type'));
         });
     });
 
@@ -527,7 +535,7 @@ document.querySelectorAll('.reveal, .section-divider').forEach(el => observer.ob
             actions: [{ label: '查看服务政策', action: 'policy' }]
         },
         fallback: {
-            text: '这个问题超出了 BTX 当前已确认的官网信息。请提交具体需求，后续由人工评估并联系你。',
+            text: '这个问题超出了当前已确认的官网信息。请提交具体需求，后续由人工评估并联系你。',
             actions: [{ label: '提交人工咨询', action: 'inquiry' }]
         }
     };
@@ -559,7 +567,7 @@ document.querySelectorAll('.reveal, .section-divider').forEach(el => observer.ob
 
         var label = document.createElement('span');
         label.className = 'btx-message-label';
-        label.textContent = sender === 'bot' ? 'BTX' : '你';
+        label.textContent = sender === 'bot' ? '助手' : '你';
         message.appendChild(label);
 
         var paragraph = document.createElement('p');
@@ -587,7 +595,7 @@ document.querySelectorAll('.reveal, .section-divider').forEach(el => observer.ob
     function appendTyping() {
         var typing = document.createElement('div');
         typing.className = 'btx-message btx-message-bot btx-message-typing';
-        typing.setAttribute('aria-label', 'BTX 正在回复');
+        typing.setAttribute('aria-label', '助手正在回复');
         typing.innerHTML = '<span></span><span></span><span></span>';
         messages.appendChild(typing);
         scrollMessages();

@@ -6494,3 +6494,182 @@ section[id] { scroll-margin-top: 72px; }
     0%, 100% { transform: translateX(-4px); }
     50% { transform: translateX(4px); }
 }
+
+/* ====================================================================
+   DETAIL PASS（2026-09 审查第二轮）
+   放在文件末尾：同等优先级下覆盖前面各断点里的旧写法
+==================================================================== */
+
+/* 首屏固定定位语：替代原来的逐字打字效果 */
+.hero-positioning {
+    letter-spacing: 0.06em;
+}
+
+/* 中文导航：等宽英文的 11px 大写样式不适合中文 */
+.nav-link {
+    font-family: var(--font-cn-body);
+    font-size: 13px;
+    letter-spacing: 0.06em;
+    text-transform: none;
+}
+
+/* 中文最小字号 12px（含中英混排的小标签） */
+.hero-identity,
+.site-tour-copy > span,
+.about-company-label,
+.capability-row h3 small,
+.stat-label,
+.highlight-caption,
+.swipe-hint span,
+.seen-in-item-kind,
+.pudong-training-label,
+.pudong-training-photos figcaption,
+.view-badge,
+.topic-video-source,
+.podcast-meta span,
+.podcast-actions > span,
+.podcast-latest span,
+.latest-tag,
+.project-status,
+.project-tag,
+.project-action,
+.commercial-path-meta,
+.commercial-price-public,
+.skill-letter-delivery small,
+.skill-letter-delivery strong,
+.public-account-copy span,
+.footer-policy-links a,
+.floating-subscribe-kicker,
+.floating-subscribe em,
+.floating-subscribe-cta,
+.floating-subscribe-mobile-cta,
+.cmd-palette-hint,
+.inquiry-form-footer p,
+.video-cover .view-badge,
+.skill-letter-price .commercial-price-public,
+.project-card-sucaitong .project-status,
+.project-card-sucaitong .project-tag {
+    font-size: 12px;
+}
+
+.seen-in-item-kind { letter-spacing: 0.04em; }
+.skill-letter-delivery small {
+    font-family: var(--font-cn-body);
+    letter-spacing: 0;
+    white-space: nowrap;
+}
+.floating-subscribe-kicker { letter-spacing: 0.08em; }
+
+/* 照片墙说明常驻显示（手机上没有悬停，原来永远看不到） */
+.highlight-caption {
+    opacity: 1;
+    transform: none;
+}
+
+/* 文字链接的点击区域：用内边距撑高，不改变视觉位置 */
+.hero-identity,
+.business-pillars h3 a,
+.pudong-training-copy a,
+.commercial-text-link,
+.skill-letter-sample-link {
+    display: inline-block;
+    padding-block: 10px;
+    margin-block: -10px;
+}
+
+.footer-policy-links a {
+    display: inline-block;
+    padding: 12px 2px;
+}
+
+.footer-policy-links {
+    gap: 0 20px;
+}
+
+@media (max-width: 768px) {
+    .footer-icon-link {
+        width: 44px;
+        height: 44px;
+    }
+}
+
+/* 硬件卡片的 OEM / ODM 咨询入口 */
+.product-inquiry {
+    margin-top: 12px;
+    min-height: 36px;
+    padding: 0 14px;
+    border: 1px solid rgba(233, 93, 33, 0.45);
+    border-radius: 999px;
+    background: rgba(233, 93, 33, 0.1);
+    color: var(--text-warm-white);
+    font-family: var(--font-cn-body);
+    font-size: 13px;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.product-inquiry:hover {
+    border-color: var(--orange-main);
+    background: var(--orange-main);
+}
+
+.product-inquiry:focus-visible {
+    outline: 2px solid var(--green-light);
+    outline-offset: 3px;
+}
+
+/* 合作表单里的隐私说明链接 */
+.inquiry-form-footer p a {
+    color: var(--text-warm-white);
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 255, 255, 0.3);
+    text-underline-offset: 3px;
+}
+
+.inquiry-form-footer p a:hover {
+    color: var(--green-light);
+}
+
+/* 子页面共用导航（关于、实战方法、政策页） */
+.subpage-nav {
+    display: flex;
+    align-items: center;
+    gap: 26px;
+    font-family: var(--font-cn-body);
+    font-size: 14px;
+}
+
+.subpage-nav a {
+    display: inline-block;
+    padding: 12px 0;
+    color: var(--text-warm-grey);
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.subpage-nav a:hover,
+.subpage-nav a[aria-current="page"] {
+    color: var(--text-warm-white);
+}
+
+.subpage-nav .subpage-nav-cta {
+    color: var(--orange-main);
+}
+
+.subpage-nav .subpage-nav-cta:hover {
+    color: var(--text-warm-white);
+}
+
+/* 手机上只留“合作咨询”：Logo 本身可以回首页，避免顶栏挤到折行 */
+@media (max-width: 768px) {
+    .subpage-nav a:not(.subpage-nav-cta) {
+        display: none;
+    }
+}
+
+.subpage-nav a,
+.insights-brand,
+.profile-brand,
+.policy-brand {
+    white-space: nowrap;
+}

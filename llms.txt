@@ -38,7 +38,7 @@
 
 - [齐件](https://qj.qianx.ai/): 面向 Mac AI 创作者的项目与素材工作台，整理视频、图片和文案，保留原始文件位置，支持 AI 素材引用与交付检查。当前为预览版。
 - [容易发](https://chromewebstore.google.com/detail/apcjmmalmljfbaicddioflcmaibjjkpp): 已上架 Chrome 商店的自媒体多平台内容分发插件，集中编辑、填充到所选平台，发布前由用户确认。
-- [硅基物语](https://siliconstory.cn/): AI 会员产品与服务体系。
+- [硅基物语小程序](https://siliconstory.cn/): 会员制 AI 产品。硅基物语是桥比特创办的公司正式名称，也是同名播客。
 - [旷野 Wayfar](https://wayfar.qianx.ai/): 全球城市旅居、远程赚钱路径与出海基础设施指南。
 - [如果世界](https://if.qianx.ai/): 会记住用户选择的 AI 微型世界。
 - [择偶定位](https://mate.siliconstory.cn/): 关系与择偶定位工具。
